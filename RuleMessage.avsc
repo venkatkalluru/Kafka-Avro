@@ -1,31 +1,16 @@
 {
-  "namespace": "Rule",
-  "type": "record",
-  "name": "RuleMessage",
-  "fields": [
-    {
-      "name": "station",
-      "type": "string"
-    },
-    {
-      "name": "model",
-      "type": "string"
-    },
-    {
-      "name": "io",
-      "type": "string"
-    },
-    {
-      "name": "timestamp",
-      "type": "long"
-    },
-    {
-      "name": "value",
-      "type": "float"
-    },
-    {
-      "name": "connection",
-      "type": "boolean"
-    }
-  ]
+  "type" : "record",
+  "name" : "RuleMessage",
+  "namespace" : "Rule",
+  "fields" : [ {
+    "name" : "table_name",
+    "type" : "string"
+  }, {
+    "name" : "schema_hash",
+    "type" : "int"
+  }, {
+    "name" : "payload",
+    "type" : "bytes"
+  } ]
 }
+

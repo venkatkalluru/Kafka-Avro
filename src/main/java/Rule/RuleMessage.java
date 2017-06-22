@@ -7,15 +7,12 @@ package Rule;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class RuleMessage extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -4933928356128317157L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"RuleMessage\",\"namespace\":\"Rule\",\"fields\":[{\"name\":\"station\",\"type\":\"string\"},{\"name\":\"model\",\"type\":\"string\"},{\"name\":\"io\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"value\",\"type\":\"float\"},{\"name\":\"connection\",\"type\":\"boolean\"}]}");
+  private static final long serialVersionUID = -8413801854223400947L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"RuleMessage\",\"namespace\":\"Rule\",\"fields\":[{\"name\":\"table_name\",\"type\":\"string\"},{\"name\":\"schema_hash\",\"type\":\"int\"},{\"name\":\"payload\",\"type\":\"bytes\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-  @Deprecated public CharSequence station;
-  @Deprecated public CharSequence model;
-  @Deprecated public CharSequence io;
-  @Deprecated public long timestamp;
-  @Deprecated public float value;
-  @Deprecated public boolean connection;
+  @Deprecated public java.lang.CharSequence table_name;
+  @Deprecated public int schema_hash;
+  @Deprecated public java.nio.ByteBuffer payload;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -27,138 +24,84 @@ public class RuleMessage extends org.apache.avro.specific.SpecificRecordBase imp
   /**
    * All-args constructor.
    */
-  public RuleMessage(CharSequence station, CharSequence model, CharSequence io, Long timestamp, Float value, Boolean connection) {
-    this.station = station;
-    this.model = model;
-    this.io = io;
-    this.timestamp = timestamp;
-    this.value = value;
-    this.connection = connection;
+  public RuleMessage(java.lang.CharSequence table_name, java.lang.Integer schema_hash, java.nio.ByteBuffer payload) {
+    this.table_name = table_name;
+    this.schema_hash = schema_hash;
+    this.payload = payload;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
   // Used by DatumWriter.  Applications should not call. 
-  public Object get(int field$) {
+  public java.lang.Object get(int field$) {
     switch (field$) {
-    case 0: return station;
-    case 1: return model;
-    case 2: return io;
-    case 3: return timestamp;
-    case 4: return value;
-    case 5: return connection;
+    case 0: return table_name;
+    case 1: return schema_hash;
+    case 2: return payload;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
   // Used by DatumReader.  Applications should not call. 
   @SuppressWarnings(value="unchecked")
-  public void put(int field$, Object value$) {
+  public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: station = (CharSequence)value$; break;
-    case 1: model = (CharSequence)value$; break;
-    case 2: io = (CharSequence)value$; break;
-    case 3: timestamp = (Long)value$; break;
-    case 4: value = (Float)value$; break;
-    case 5: connection = (Boolean)value$; break;
+    case 0: table_name = (java.lang.CharSequence)value$; break;
+    case 1: schema_hash = (java.lang.Integer)value$; break;
+    case 2: payload = (java.nio.ByteBuffer)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
 
   /**
-   * Gets the value of the 'station' field.
+   * Gets the value of the 'table_name' field.
    */
-  public CharSequence getStation() {
-    return station;
+  public java.lang.CharSequence getTableName() {
+    return table_name;
   }
 
   /**
-   * Sets the value of the 'station' field.
+   * Sets the value of the 'table_name' field.
    * @param value the value to set.
    */
-  public void setStation(CharSequence value) {
-    this.station = value;
+  public void setTableName(java.lang.CharSequence value) {
+    this.table_name = value;
   }
 
   /**
-   * Gets the value of the 'model' field.
+   * Gets the value of the 'schema_hash' field.
    */
-  public CharSequence getModel() {
-    return model;
+  public java.lang.Integer getSchemaHash() {
+    return schema_hash;
   }
 
   /**
-   * Sets the value of the 'model' field.
+   * Sets the value of the 'schema_hash' field.
    * @param value the value to set.
    */
-  public void setModel(CharSequence value) {
-    this.model = value;
+  public void setSchemaHash(java.lang.Integer value) {
+    this.schema_hash = value;
   }
 
   /**
-   * Gets the value of the 'io' field.
+   * Gets the value of the 'payload' field.
    */
-  public CharSequence getIo() {
-    return io;
+  public java.nio.ByteBuffer getPayload() {
+    return payload;
   }
 
   /**
-   * Sets the value of the 'io' field.
+   * Sets the value of the 'payload' field.
    * @param value the value to set.
    */
-  public void setIo(CharSequence value) {
-    this.io = value;
-  }
-
-  /**
-   * Gets the value of the 'timestamp' field.
-   */
-  public Long getTimestamp() {
-    return timestamp;
-  }
-
-  /**
-   * Sets the value of the 'timestamp' field.
-   * @param value the value to set.
-   */
-  public void setTimestamp(Long value) {
-    this.timestamp = value;
-  }
-
-  /**
-   * Gets the value of the 'value' field.
-   */
-  public Float getValue() {
-    return value;
-  }
-
-  /**
-   * Sets the value of the 'value' field.
-   * @param value the value to set.
-   */
-  public void setValue(Float value) {
-    this.value = value;
-  }
-
-  /**
-   * Gets the value of the 'connection' field.
-   */
-  public Boolean getConnection() {
-    return connection;
-  }
-
-  /**
-   * Sets the value of the 'connection' field.
-   * @param value the value to set.
-   */
-  public void setConnection(Boolean value) {
-    this.connection = value;
+  public void setPayload(java.nio.ByteBuffer value) {
+    this.payload = value;
   }
 
   /**
    * Creates a new RuleMessage RecordBuilder.
    * @return A new RuleMessage RecordBuilder
    */
-  public static Builder newBuilder() {
-    return new Builder();
+  public static Rule.RuleMessage.Builder newBuilder() {
+    return new Rule.RuleMessage.Builder();
   }
   
   /**
@@ -166,8 +109,8 @@ public class RuleMessage extends org.apache.avro.specific.SpecificRecordBase imp
    * @param other The existing builder to copy.
    * @return A new RuleMessage RecordBuilder
    */
-  public static Builder newBuilder(Builder other) {
-    return new Builder(other);
+  public static Rule.RuleMessage.Builder newBuilder(Rule.RuleMessage.Builder other) {
+    return new Rule.RuleMessage.Builder(other);
   }
   
   /**
@@ -175,8 +118,8 @@ public class RuleMessage extends org.apache.avro.specific.SpecificRecordBase imp
    * @param other The existing instance to copy.
    * @return A new RuleMessage RecordBuilder
    */
-  public static Builder newBuilder(RuleMessage other) {
-    return new Builder(other);
+  public static Rule.RuleMessage.Builder newBuilder(Rule.RuleMessage other) {
+    return new Rule.RuleMessage.Builder(other);
   }
   
   /**
@@ -185,47 +128,32 @@ public class RuleMessage extends org.apache.avro.specific.SpecificRecordBase imp
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<RuleMessage>
     implements org.apache.avro.data.RecordBuilder<RuleMessage> {
 
-    private CharSequence station;
-    private CharSequence model;
-    private CharSequence io;
-    private long timestamp;
-    private float value;
-    private boolean connection;
+    private java.lang.CharSequence table_name;
+    private int schema_hash;
+    private java.nio.ByteBuffer payload;
 
     /** Creates a new Builder */
     private Builder() {
-      super(RuleMessage.SCHEMA$);
+      super(Rule.RuleMessage.SCHEMA$);
     }
     
     /**
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(Builder other) {
+    private Builder(Rule.RuleMessage.Builder other) {
       super(other);
-      if (isValidValue(fields()[0], other.station)) {
-        this.station = data().deepCopy(fields()[0].schema(), other.station);
+      if (isValidValue(fields()[0], other.table_name)) {
+        this.table_name = data().deepCopy(fields()[0].schema(), other.table_name);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.model)) {
-        this.model = data().deepCopy(fields()[1].schema(), other.model);
+      if (isValidValue(fields()[1], other.schema_hash)) {
+        this.schema_hash = data().deepCopy(fields()[1].schema(), other.schema_hash);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.io)) {
-        this.io = data().deepCopy(fields()[2].schema(), other.io);
+      if (isValidValue(fields()[2], other.payload)) {
+        this.payload = data().deepCopy(fields()[2].schema(), other.payload);
         fieldSetFlags()[2] = true;
-      }
-      if (isValidValue(fields()[3], other.timestamp)) {
-        this.timestamp = data().deepCopy(fields()[3].schema(), other.timestamp);
-        fieldSetFlags()[3] = true;
-      }
-      if (isValidValue(fields()[4], other.value)) {
-        this.value = data().deepCopy(fields()[4].schema(), other.value);
-        fieldSetFlags()[4] = true;
-      }
-      if (isValidValue(fields()[5], other.connection)) {
-        this.connection = data().deepCopy(fields()[5].schema(), other.connection);
-        fieldSetFlags()[5] = true;
       }
     }
     
@@ -233,262 +161,135 @@ public class RuleMessage extends org.apache.avro.specific.SpecificRecordBase imp
      * Creates a Builder by copying an existing RuleMessage instance
      * @param other The existing instance to copy.
      */
-    private Builder(RuleMessage other) {
-            super(RuleMessage.SCHEMA$);
-      if (isValidValue(fields()[0], other.station)) {
-        this.station = data().deepCopy(fields()[0].schema(), other.station);
+    private Builder(Rule.RuleMessage other) {
+            super(Rule.RuleMessage.SCHEMA$);
+      if (isValidValue(fields()[0], other.table_name)) {
+        this.table_name = data().deepCopy(fields()[0].schema(), other.table_name);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.model)) {
-        this.model = data().deepCopy(fields()[1].schema(), other.model);
+      if (isValidValue(fields()[1], other.schema_hash)) {
+        this.schema_hash = data().deepCopy(fields()[1].schema(), other.schema_hash);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.io)) {
-        this.io = data().deepCopy(fields()[2].schema(), other.io);
+      if (isValidValue(fields()[2], other.payload)) {
+        this.payload = data().deepCopy(fields()[2].schema(), other.payload);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.timestamp)) {
-        this.timestamp = data().deepCopy(fields()[3].schema(), other.timestamp);
-        fieldSetFlags()[3] = true;
-      }
-      if (isValidValue(fields()[4], other.value)) {
-        this.value = data().deepCopy(fields()[4].schema(), other.value);
-        fieldSetFlags()[4] = true;
-      }
-      if (isValidValue(fields()[5], other.connection)) {
-        this.connection = data().deepCopy(fields()[5].schema(), other.connection);
-        fieldSetFlags()[5] = true;
-      }
     }
 
     /**
-      * Gets the value of the 'station' field.
+      * Gets the value of the 'table_name' field.
       * @return The value.
       */
-    public CharSequence getStation() {
-      return station;
+    public java.lang.CharSequence getTableName() {
+      return table_name;
     }
 
     /**
-      * Sets the value of the 'station' field.
-      * @param value The value of 'station'.
+      * Sets the value of the 'table_name' field.
+      * @param value The value of 'table_name'.
       * @return This builder.
       */
-    public Builder setStation(CharSequence value) {
+    public Rule.RuleMessage.Builder setTableName(java.lang.CharSequence value) {
       validate(fields()[0], value);
-      this.station = value;
+      this.table_name = value;
       fieldSetFlags()[0] = true;
       return this; 
     }
 
     /**
-      * Checks whether the 'station' field has been set.
-      * @return True if the 'station' field has been set, false otherwise.
+      * Checks whether the 'table_name' field has been set.
+      * @return True if the 'table_name' field has been set, false otherwise.
       */
-    public boolean hasStation() {
+    public boolean hasTableName() {
       return fieldSetFlags()[0];
     }
 
 
     /**
-      * Clears the value of the 'station' field.
+      * Clears the value of the 'table_name' field.
       * @return This builder.
       */
-    public Builder clearStation() {
-      station = null;
+    public Rule.RuleMessage.Builder clearTableName() {
+      table_name = null;
       fieldSetFlags()[0] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'model' field.
+      * Gets the value of the 'schema_hash' field.
       * @return The value.
       */
-    public CharSequence getModel() {
-      return model;
+    public java.lang.Integer getSchemaHash() {
+      return schema_hash;
     }
 
     /**
-      * Sets the value of the 'model' field.
-      * @param value The value of 'model'.
+      * Sets the value of the 'schema_hash' field.
+      * @param value The value of 'schema_hash'.
       * @return This builder.
       */
-    public Builder setModel(CharSequence value) {
+    public Rule.RuleMessage.Builder setSchemaHash(int value) {
       validate(fields()[1], value);
-      this.model = value;
+      this.schema_hash = value;
       fieldSetFlags()[1] = true;
       return this; 
     }
 
     /**
-      * Checks whether the 'model' field has been set.
-      * @return True if the 'model' field has been set, false otherwise.
+      * Checks whether the 'schema_hash' field has been set.
+      * @return True if the 'schema_hash' field has been set, false otherwise.
       */
-    public boolean hasModel() {
+    public boolean hasSchemaHash() {
       return fieldSetFlags()[1];
     }
 
 
     /**
-      * Clears the value of the 'model' field.
+      * Clears the value of the 'schema_hash' field.
       * @return This builder.
       */
-    public Builder clearModel() {
-      model = null;
+    public Rule.RuleMessage.Builder clearSchemaHash() {
       fieldSetFlags()[1] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'io' field.
+      * Gets the value of the 'payload' field.
       * @return The value.
       */
-    public CharSequence getIo() {
-      return io;
+    public java.nio.ByteBuffer getPayload() {
+      return payload;
     }
 
     /**
-      * Sets the value of the 'io' field.
-      * @param value The value of 'io'.
+      * Sets the value of the 'payload' field.
+      * @param value The value of 'payload'.
       * @return This builder.
       */
-    public Builder setIo(CharSequence value) {
+    public Rule.RuleMessage.Builder setPayload(java.nio.ByteBuffer value) {
       validate(fields()[2], value);
-      this.io = value;
+      this.payload = value;
       fieldSetFlags()[2] = true;
       return this; 
     }
 
     /**
-      * Checks whether the 'io' field has been set.
-      * @return True if the 'io' field has been set, false otherwise.
+      * Checks whether the 'payload' field has been set.
+      * @return True if the 'payload' field has been set, false otherwise.
       */
-    public boolean hasIo() {
+    public boolean hasPayload() {
       return fieldSetFlags()[2];
     }
 
 
     /**
-      * Clears the value of the 'io' field.
+      * Clears the value of the 'payload' field.
       * @return This builder.
       */
-    public Builder clearIo() {
-      io = null;
+    public Rule.RuleMessage.Builder clearPayload() {
+      payload = null;
       fieldSetFlags()[2] = false;
-      return this;
-    }
-
-    /**
-      * Gets the value of the 'timestamp' field.
-      * @return The value.
-      */
-    public Long getTimestamp() {
-      return timestamp;
-    }
-
-    /**
-      * Sets the value of the 'timestamp' field.
-      * @param value The value of 'timestamp'.
-      * @return This builder.
-      */
-    public Builder setTimestamp(long value) {
-      validate(fields()[3], value);
-      this.timestamp = value;
-      fieldSetFlags()[3] = true;
-      return this; 
-    }
-
-    /**
-      * Checks whether the 'timestamp' field has been set.
-      * @return True if the 'timestamp' field has been set, false otherwise.
-      */
-    public boolean hasTimestamp() {
-      return fieldSetFlags()[3];
-    }
-
-
-    /**
-      * Clears the value of the 'timestamp' field.
-      * @return This builder.
-      */
-    public Builder clearTimestamp() {
-      fieldSetFlags()[3] = false;
-      return this;
-    }
-
-    /**
-      * Gets the value of the 'value' field.
-      * @return The value.
-      */
-    public Float getValue() {
-      return value;
-    }
-
-    /**
-      * Sets the value of the 'value' field.
-      * @param value The value of 'value'.
-      * @return This builder.
-      */
-    public Builder setValue(float value) {
-      validate(fields()[4], value);
-      this.value = value;
-      fieldSetFlags()[4] = true;
-      return this; 
-    }
-
-    /**
-      * Checks whether the 'value' field has been set.
-      * @return True if the 'value' field has been set, false otherwise.
-      */
-    public boolean hasValue() {
-      return fieldSetFlags()[4];
-    }
-
-
-    /**
-      * Clears the value of the 'value' field.
-      * @return This builder.
-      */
-    public Builder clearValue() {
-      fieldSetFlags()[4] = false;
-      return this;
-    }
-
-    /**
-      * Gets the value of the 'connection' field.
-      * @return The value.
-      */
-    public Boolean getConnection() {
-      return connection;
-    }
-
-    /**
-      * Sets the value of the 'connection' field.
-      * @param value The value of 'connection'.
-      * @return This builder.
-      */
-    public Builder setConnection(boolean value) {
-      validate(fields()[5], value);
-      this.connection = value;
-      fieldSetFlags()[5] = true;
-      return this; 
-    }
-
-    /**
-      * Checks whether the 'connection' field has been set.
-      * @return True if the 'connection' field has been set, false otherwise.
-      */
-    public boolean hasConnection() {
-      return fieldSetFlags()[5];
-    }
-
-
-    /**
-      * Clears the value of the 'connection' field.
-      * @return This builder.
-      */
-    public Builder clearConnection() {
-      fieldSetFlags()[5] = false;
       return this;
     }
 
@@ -496,12 +297,9 @@ public class RuleMessage extends org.apache.avro.specific.SpecificRecordBase imp
     public RuleMessage build() {
       try {
         RuleMessage record = new RuleMessage();
-        record.station = fieldSetFlags()[0] ? this.station : (CharSequence) defaultValue(fields()[0]);
-        record.model = fieldSetFlags()[1] ? this.model : (CharSequence) defaultValue(fields()[1]);
-        record.io = fieldSetFlags()[2] ? this.io : (CharSequence) defaultValue(fields()[2]);
-        record.timestamp = fieldSetFlags()[3] ? this.timestamp : (Long) defaultValue(fields()[3]);
-        record.value = fieldSetFlags()[4] ? this.value : (Float) defaultValue(fields()[4]);
-        record.connection = fieldSetFlags()[5] ? this.connection : (Boolean) defaultValue(fields()[5]);
+        record.table_name = fieldSetFlags()[0] ? this.table_name : (java.lang.CharSequence) defaultValue(fields()[0]);
+        record.schema_hash = fieldSetFlags()[1] ? this.schema_hash : (java.lang.Integer) defaultValue(fields()[1]);
+        record.payload = fieldSetFlags()[2] ? this.payload : (java.nio.ByteBuffer) defaultValue(fields()[2]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
