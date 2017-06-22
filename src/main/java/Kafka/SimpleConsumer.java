@@ -38,12 +38,15 @@ public class SimpleConsumer {
         while (true) {
             ConsumerRecords<String, byte[]> records = consumer.poll(100);
             for (ConsumerRecord<String, byte[]> record : records) {
-            	System.out.println("Bytes are " + record.value());
-            	System.out.println("Print Stream data " + new String(record.value()));
-                RuleMessage ruleMessage = new RuleDeserializer().DeserializeRule(record.value());
-				System.out.printf("offset = %d, key = %s, value = %s \n", record.offset(), record.key(), ruleMessage);
+//            	System.out.println("Bytes are " + record.value());
+//            	System.out.println("Print Stream data " + new String(record.value()));
+                ArrayList<RuleMessage> rmList = new RuleDeserializer().DeserializeRule(record.value());
+                for (Iterator<RuleMessage> iterator = rmList.iterator(); iterator
+						.hasNext();) {
+					RuleMessage ruleMessage = (RuleMessage) iterator.next();
+					System.out.printf("offset = %d, key = %s, value = %s \n", record.offset(), record.key(), ruleMessage);
+				}
             }
-
         }
     }
 }
