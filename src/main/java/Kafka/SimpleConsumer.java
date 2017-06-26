@@ -1,7 +1,5 @@
 package Kafka;
 
-import Message.EventMessage;
-import Message.EventMessageDeserializer;
 import Rule.RuleDeserializer;
 import Rule.RuleMessage;
 
@@ -9,13 +7,10 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
-import java.io.PrintStream;
 
 public class SimpleConsumer {
 	public SimpleConsumer() {
@@ -42,17 +37,19 @@ public class SimpleConsumer {
 				ConsumerRecords<String, byte[]> records = consumer.poll(100);
 				for (ConsumerRecord<String, byte[]> record : records) {
 					// System.out.println("Bytes are " + record.value());
-//					 System.out.println("Print Stream data " + new String(record.value()));
+					// System.out.println("Print Stream data " + new
+					// String(record.value()));
 					try {
 						ArrayList<RuleMessage> rmList = new RuleDeserializer()
 								.DeserializeRule(record.value());
-					for (Iterator<RuleMessage> iterator = rmList.iterator(); iterator
-							.hasNext();) {
-						RuleMessage ruleMessage = (RuleMessage) iterator.next();
-						System.out.printf(
-								"offset = %d, key = %s, value = %s \n",
-								record.offset(), record.key(), ruleMessage);
-					}
+						for (Iterator<RuleMessage> iterator = rmList.iterator(); iterator
+								.hasNext();) {
+							RuleMessage ruleMessage = (RuleMessage) iterator
+									.next();
+							System.out.printf(
+									"offset = %d, key = %s, value = %s \n",
+									record.offset(), record.key(), ruleMessage);
+						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -95,7 +92,7 @@ public class SimpleConsumer {
 	public static void main(String[] args) throws Exception {
 		Thread t1 = new Thread(new MsgConsumer());
 		t1.start();
-		 Thread t2 = new Thread(new SchemaConsumer());
-		 t2.start();
+		Thread t2 = new Thread(new SchemaConsumer());
+		t2.start();
 	}
 }
