@@ -4,7 +4,11 @@ import Rule.RuleDeserializer;
 import Rule.RuleMessage;
 
 import org.apache.avro.Schema;
+import org.apache.avro.file.DataFileWriter;
+import org.apache.avro.generic.GenericDatumWriter;
+import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
+import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
@@ -13,6 +17,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +29,8 @@ import java.util.UUID;
 
 public class SimpleConsumer {
 	private static Map<Integer, String> tableToSchemaMap = new HashMap<>();
+	private static Map<String, DataFileWriter<GenericRecord>> tableToFileWriter = new HashMap<>();
+	private static Map<String, Integer> tableNameToHashCode = new HashMap<>();
 	public SimpleConsumer() {
 
 	}
@@ -63,13 +70,14 @@ public class SimpleConsumer {
 								String schemaStr = tableToSchemaMap.get(ruleMessage.getSchemaHash());
 								Schema schema = new Schema.Parser().parse(schemaStr);
 								
-								DatumReader<RuleMessage> reader = new SpecificDatumReader<>(schema);
+								DatumReader<GenericRecord> reader = new SpecificDatumReader<>(schema);
 								Decoder decoder = null;
 								try{
 									decoder = DecoderFactory.get().binaryDecoder(ruleMessage.getPayload().array(), null);
 								   
-									Object msg = reader.read(null, decoder);
+									GenericRecord msg = reader.read(null, decoder);
 									System.out.println("Decoded CDC data is " + msg);
+									writeToFile(ruleMessage.getTableName().toString(), ruleMessage.getSchemaHash(), msg);
 									
 								} catch(EOFException exception){
 								//    exception.printStackTrace();
@@ -84,9 +92,35 @@ public class SimpleConsumer {
 					}
 				}
 			}
-
 		}
 
+		private void writeToFile(String tableName, Integer hashCode, GenericRecord avroData) throws IOException {
+			// TODO Auto-generated method stub
+			String hashCodedTableName = tableName + hashCode.toString() + ".avro";
+			String fileName;
+			DataFileWriter<GenericRecord> dataFileWriter;
+			if (tableToFileWriter.containsKey(hashCodedTableName)) {
+				dataFileWriter = tableToFileWriter.get(hashCodedTableName);
+				
+			} else {
+				Integer oldHasCode = tableNameToHashCode.get(tableName);
+				if (oldHasCode!= null) {
+					dataFileWriter = tableToFileWriter.get(tableName);
+					System.out.println("Closing the old file as we are going to write to new file" + "Old HasCode is " + oldHasCode);
+					dataFileWriter.close();
+					tableToFileWriter.remove(tableName);
+				}
+				
+				Schema schema = new Schema.Parser().parse(tableToSchemaMap.get(hashCode));
+				DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<GenericRecord>(schema);
+				dataFileWriter = new DataFileWriter<GenericRecord>(datumWriter);
+				tableToFileWriter.put(hashCodedTableName, dataFileWriter);
+				File file = new File(hashCodedTableName);
+				dataFileWriter.create(schema, file);				
+			}
+			dataFileWriter.append(avroData);
+			dataFileWriter.flush();
+		}
 	}
 
 	private static class SchemaConsumer implements Runnable {
