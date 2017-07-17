@@ -17,8 +17,10 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.sink.SinkTaskContext;
 
+import io.confluent.connect.avro.AvroData;
 import io.confluent.connect.s3.S3SinkConnectorConfig;
 import io.confluent.connect.s3.TopicPartitionWriter;
 import io.confluent.connect.s3.storage.S3Storage;
@@ -39,6 +41,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
+import javax.print.DocFlavor.URL;
+
 public class SimpleConsumer {
 	private static Map<Integer, String> tableToSchemaMap = new HashMap<>();
 	private static Map<String, DataFileWriter<GenericRecord>> tableToFileWriter = new HashMap<>();
@@ -50,9 +54,9 @@ public class SimpleConsumer {
 	private static class MsgConsumer implements Runnable {
 		public void run() {
 			Properties props = new Properties();
-			props.put("bootstrap.servers", "10.204.99.224:9092");
+			props.put("bootstrap.servers", "10.204.99.230:9092");
 			props.put("group.id", "events");
-			props.put("enable.auto.commit", "true");
+			props.put("enable.auto.commit", "false");
 			props.put("auto.commit.interval.ms", "1000");
 			props.put("session.timeout.ms", "30000");
 			props.put("key.deserializer",
@@ -90,12 +94,14 @@ public class SimpleConsumer {
 									GenericRecord msg = reader.read(null, decoder);
 									System.out.println("Decoded CDC data is " + msg);
 //									writeToFile(ruleMessage.getTableName().toString(), ruleMessage.getSchemaHash(), msg);
-									writeToS3(ruleMessage.getTableName().toString(), ruleMessage.getSchemaHash(), msg);
+									writeToS3(ruleMessage.getTableName().toString(), ruleMessage.getSchemaHash(), msg, record.offset());
 									
 								} catch(EOFException exception){
 								//    exception.printStackTrace();
 								} catch(IOException exception){
 									exception.printStackTrace();
+								} catch(Exception e) {
+									e.printStackTrace();
 								}
 							}
 						}
@@ -107,12 +113,20 @@ public class SimpleConsumer {
 			}
 		}
 
-		private void writeToS3(String string, Integer schemaHash, GenericRecord msg) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+		private void writeToS3(String string, Integer schemaHash, GenericRecord msg, long kafkaOffset) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 			// TODO Auto-generated method stub
 			
-			TopicPartition tp = new TopicPartition("test-topic", 0);
-			
+			String topic = "test-topic";
+			int partition = 0;
+			TopicPartition tp = new TopicPartition(topic, partition);
+		
+			//TODO: Populate the properties
 			Map<String, String> props = new HashMap<>();
+			
+			ClassLoader classLoader = MsgConsumer.class.getClassLoader();
+			java.net.URL resource = classLoader.getResource("org/apache/http/conn/ssl/AllowAllHostnameVerifier.class");
+			System.out.println(resource);
+			
 			S3SinkConnectorConfig conf = new S3SinkConnectorConfig(props);
 			String url = "test-url";
 			S3Storage storage = new S3Storage(conf, url);
@@ -126,7 +140,15 @@ public class SimpleConsumer {
 			Partitioner<FieldSchema> partitioner = newPartitioner(conf);
 			SinkTaskContext context = null;
 			TopicPartitionWriter writer = new TopicPartitionWriter(tp, storage, writerProvider, partitioner, conf, context);
-			
+		
+			AvroData avroData = new AvroData(2);
+			org.apache.kafka.connect.data.Schema keySchema = null;
+			Object key = null;
+			org.apache.kafka.connect.data.Schema valueSchema = avroData.toConnectSchema(new Schema.Parser().parse(tableToSchemaMap.get(schemaHash)));
+			Object value = msg;
+			SinkRecord sinkRecord = new SinkRecord(topic, partition, keySchema, key, valueSchema, value, kafkaOffset);
+			writer.buffer(sinkRecord );
+			writer.write();			
 		}
 		
 	  private Partitioner<FieldSchema> newPartitioner(S3SinkConnectorConfig config)
@@ -188,7 +210,7 @@ public class SimpleConsumer {
 		
 		public void run() {
 			Properties props = new Properties();
-			props.put("bootstrap.servers", "10.204.99.224:9092");
+			props.put("bootstrap.servers", "10.204.99.230:9092");
 //			props.put("group.id", "events");
 			props.put("group.id", UUID.randomUUID().toString());
 			props.put("enable.auto.commit", "true");
@@ -209,7 +231,7 @@ public class SimpleConsumer {
 					String schema = new String(record.value());
 					System.out.println("Schema value is " + schema);
 					System.out.println("Schema Hash Code is "
-							+ schema.hashCode());
+						+ schema.hashCode());
 					if (!tableToSchemaMap.containsKey(schema.hashCode())) {
 						tableToSchemaMap.put(schema.hashCode(), schema);
 					}
