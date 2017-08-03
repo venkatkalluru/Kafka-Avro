@@ -31,9 +31,10 @@ public class SimpleProducer {
         props.put("batch.size", 16384);
         props.put("linger.ms", 1);
         props.put("buffer.memory", 33554432);
-        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         kafkaProducer = new KafkaProducer(props);
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         schemaProducer = new KafkaProducer(props);
     }
@@ -83,12 +84,12 @@ public class SimpleProducer {
         Random rand = new Random();
         try {
         	
-        	sp.publish(event.getSchema().toString(), "event-schema", "schema-topic");
-        	sp.publish(event2.getSchema().toString(), "event2-schema", "schema-topic");
+        	sp.publish(event.getSchema().toString(), "event-schema", "schema-topic-1");
+        	sp.publish(event2.getSchema().toString(), "event2-schema", "schema-topic-1");
         	
             EventMessageSerializer eventMessageSerializer = new EventMessageSerializer();
             
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 2; i++) {
                 event.setStatus(rand.nextFloat() * (maxX - minX) + minX);
                 event.setMachine(machines[new Random().nextInt(machines.length)]);
                 
@@ -97,7 +98,7 @@ public class SimpleProducer {
                 gw.setSchemaHash(event.hashCode());
                 gw.setPayload(ByteBuffer.wrap(eventMessageSerializer.serializeMessage(event)));
                 
-                sp.publish(eventMessageSerializer.serializeGenericMessage(gw), event.getId().toString(), "msg-topic");
+                sp.publish(eventMessageSerializer.serializeGenericMessage(gw), event.getId().toString(), "msg-topic-1");
                 
                ///////////// event 2 /////////// 
                 
@@ -109,7 +110,7 @@ public class SimpleProducer {
                 gw2.setSchemaHash(event2.hashCode());
                 gw2.setPayload(ByteBuffer.wrap(eventMessageSerializer.serializeMessage(event2)));
                 
-                sp.publish(eventMessageSerializer.serializeGenericMessage(gw2), event2.getId().toString(), "msg-topic");
+                sp.publish(eventMessageSerializer.serializeGenericMessage(gw2), event2.getId().toString(), "msg-topic-1");
             }
         } catch (EOFException e) {
             e.printStackTrace();
