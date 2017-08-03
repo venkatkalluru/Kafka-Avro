@@ -1,5 +1,7 @@
 package Message;
 
+import oracle.goldengate.generic_wrapper;
+
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
@@ -20,6 +22,17 @@ public class EventMessageSerializer {
         BinaryEncoder encoder = EncoderFactory.get().binaryEncoder(out, null);
         DatumWriter<EventMessage> writer = new SpecificDatumWriter<EventMessage>(EventMessage.getClassSchema());
         writer.write(eventMessage, encoder);
+        encoder.flush();
+        out.close();
+        return out.toByteArray();
+    }
+    
+    public byte[] serializeGenericMessage(generic_wrapper gwMessage) throws IOException {
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        BinaryEncoder encoder = EncoderFactory.get().binaryEncoder(out, null);
+        DatumWriter<generic_wrapper> writer = new SpecificDatumWriter<generic_wrapper>(generic_wrapper.getClassSchema());
+        writer.write(gwMessage, encoder);
         encoder.flush();
         out.close();
         return out.toByteArray();
