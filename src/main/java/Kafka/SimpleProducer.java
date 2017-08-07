@@ -2,6 +2,7 @@ package Kafka;
 
 import Message.EventMessage;
 import Message.EventMessageSerializer;
+import Message2.EventMessage2;
 import oracle.goldengate.generic_wrapper;
 
 import org.apache.kafka.clients.producer.*;
@@ -67,12 +68,19 @@ public class SimpleProducer {
         event.setId("5ba51e3");
         event.setDate(new Date().getTime());
         
+        EventMessage2 event2 = new EventMessage2();
+        String[] machines2 = {"pump_1", "pump_2", "tank_1", "tank_2"};
+        event2.setBuilding("building_3");
+        event2.setId("5ba51e3");
+        event2.setDate(new Date().getTime());
+        
         float minX = 1f;
         float maxX = 100.0f;
         Random rand = new Random();
         try {
         	
         	sp.publish(event.getSchema().toString(), "event-schema", "schema-topic-2");
+        	sp.publish(event2.getSchema().toString(), "event2-schema", "schema-topic-2");
         	
             EventMessageSerializer eventMessageSerializer = new EventMessageSerializer();
             
@@ -86,6 +94,16 @@ public class SimpleProducer {
                 gw.setPayload(ByteBuffer.wrap(eventMessageSerializer.serializeMessage(event)));
                 
                 sp.publish(eventMessageSerializer.serializeGenericMessage(gw), event.getId().toString(), "msg-topic-2");
+               
+                //Event 2
+                event2.setStatus("test");
+                event2.setMachine2("test-machine");
+                generic_wrapper gw2 = new generic_wrapper();
+                gw2.setTableName("Event2");
+                gw2.setSchemaHash(event2.hashCode());
+                gw2.setPayload(ByteBuffer.wrap(eventMessageSerializer.serializeMessage(event2)));
+                
+                sp.publish(eventMessageSerializer.serializeGenericMessage(gw2), event2.getId().toString(), "msg-topic-2");
             }
         } catch (EOFException e) {
             e.printStackTrace();

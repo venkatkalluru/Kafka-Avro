@@ -8,6 +8,8 @@ import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
+import Message2.EventMessage2;
+
 import java.io.IOException;
 
 public class EventMessageSerializer {
@@ -21,6 +23,17 @@ public class EventMessageSerializer {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         BinaryEncoder encoder = EncoderFactory.get().binaryEncoder(out, null);
         DatumWriter<EventMessage> writer = new SpecificDatumWriter<EventMessage>(EventMessage.getClassSchema());
+        writer.write(eventMessage, encoder);
+        encoder.flush();
+        out.close();
+        return out.toByteArray();
+    }
+    
+    public byte[] serializeMessage(EventMessage2 eventMessage) throws IOException {
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        BinaryEncoder encoder = EncoderFactory.get().binaryEncoder(out, null);
+        DatumWriter<EventMessage2> writer = new SpecificDatumWriter<EventMessage2>(EventMessage2.getClassSchema());
         writer.write(eventMessage, encoder);
         encoder.flush();
         out.close();
