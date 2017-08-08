@@ -79,12 +79,12 @@ public class SimpleProducer {
         Random rand = new Random();
         try {
         	
-        	sp.publish(event.getSchema().toString(), "event-schema", "schema-topic-3");
-        	sp.publish(event2.getSchema().toString(), "event2-schema", "schema-topic-3");
+        	sp.publish(event.getSchema().toString(), "event-schema", "schema-topic-4");
+        	sp.publish(event2.getSchema().toString(), "event2-schema", "schema-topic-4");
         	
             EventMessageSerializer eventMessageSerializer = new EventMessageSerializer();
             
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 100; i++) {
                 event.setStatus(rand.nextFloat() * (maxX - minX) + minX);
                 event.setMachine(machines[new Random().nextInt(machines.length)]);
                 
@@ -93,7 +93,7 @@ public class SimpleProducer {
                 gw.setSchemaHash(event.getSchema().toString().hashCode());
                 gw.setPayload(ByteBuffer.wrap(eventMessageSerializer.serializeMessage(event)));
                 
-                sp.publish(eventMessageSerializer.serializeGenericMessage(gw), event.getId().toString(), "msg-topic-3");
+                sp.publish(eventMessageSerializer.serializeGenericMessage(gw), event.getId().toString(), "msg-topic-4");
                
                 //Event 2
                 event2.setStatus("test");
@@ -103,7 +103,7 @@ public class SimpleProducer {
                 gw2.setSchemaHash(event2.getSchema().toString().hashCode());
                 gw2.setPayload(ByteBuffer.wrap(eventMessageSerializer.serializeMessage(event2)));
                 
-                sp.publish(eventMessageSerializer.serializeGenericMessage(gw2), event2.getId().toString(), "msg-topic-3");
+                sp.publish(eventMessageSerializer.serializeGenericMessage(gw2), event2.getId().toString(), "msg-topic-4");
             }
         } catch (EOFException e) {
             e.printStackTrace();
