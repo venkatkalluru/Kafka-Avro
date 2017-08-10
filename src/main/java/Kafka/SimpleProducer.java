@@ -84,7 +84,7 @@ public class SimpleProducer {
         	
             EventMessageSerializer eventMessageSerializer = new EventMessageSerializer();
             
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 2; i++) {
                 event.setStatus(rand.nextFloat() * (maxX - minX) + minX);
                 event.setMachine(machines[new Random().nextInt(machines.length)]);
                 
@@ -92,8 +92,15 @@ public class SimpleProducer {
                 gw.setTableName("Event");
                 gw.setSchemaHash(event.getSchema().toString().hashCode());
                 gw.setPayload(ByteBuffer.wrap(eventMessageSerializer.serializeMessage(event)));
+               
+                byte[] evnt1 = eventMessageSerializer.serializeGenericMessage(gw);
+                byte[] kafkaData = new byte[3*evnt1.length];
+                System.arraycopy( evnt1, 0, kafkaData, 0, evnt1.length );
+                System.arraycopy( evnt1, 0, kafkaData, evnt1.length, evnt1.length);
+                System.arraycopy( evnt1, 0, kafkaData, 2*evnt1.length, evnt1.length);
+                		
                 
-                sp.publish(eventMessageSerializer.serializeGenericMessage(gw), event.getId().toString(), "msg-topic-4");
+                sp.publish(kafkaData, event.getId().toString(), "msg-topic-4");
                
                 //Event 2
                 event2.setStatus("test");
